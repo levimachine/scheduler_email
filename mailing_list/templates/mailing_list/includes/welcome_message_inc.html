@@ -1,0 +1,18 @@
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">Приветствую тебя!</h1>
+            <p class="lead text-body-secondary">В этом веб приложении ты можешь сделать рассылку, оставить отзыв
+                о
+                нашем сервисе и многое другое!</p>
+            <p>
+                <a href="{% url 'mailing_list:client_create' %}" class="btn btn-primary my-2">Добавить клиента</a>
+                <a href="{% url 'mailing_list:message_create' %}" class="btn btn-primary my-2">Создать сообщение для
+                    рассылки</a>
+                <a href="{% url 'mailing_list:mailingsettings_create' %}" class="btn btn-primary my-2">Создать
+                    рассылку</a>
+            </p>
+        </div>
+    </div>
+</section>
+
+

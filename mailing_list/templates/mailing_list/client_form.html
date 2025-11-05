@@ -1,0 +1,35 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <br>
+    <br>
+    <h1>Создание клиента для рассылки</h1>
+    <br>
+    <br>
+    <div class="card centered">
+        <div class="container centered">
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="id_mail" class="form-label">Email адрес</label>
+                    {{ form.mail }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_fullname" class="form-label">Полное имя</label>
+                    {{ form.fullname }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_comment" class="form-label">Комментарий</label>
+                    {{ form.comment }}
+                </div>
+                <button type="submit" href="{% url 'mailing_list:client_list' %}" class="btn btn-primary my-2">
+                    Создать
+                </button>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}
+
+

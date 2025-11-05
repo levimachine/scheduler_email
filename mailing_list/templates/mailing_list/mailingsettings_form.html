@@ -1,0 +1,50 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <br>
+    <br>
+    <h1>Создание рассылки</h1>
+    <br>
+    <br>
+
+    <div class="card centered">
+        <div class="container centered">
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_first_sending_date" class="form-label">Дата и время первой отправки</label>
+                    <input
+                            type="datetime-local"
+                            name="first_sending_date"
+                            id="id_first_sending_date"
+                            class="form-control"
+                            required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_period" class="form-label">Периодичность (в днях), каждые</label>
+                    {{ form.period }} дней
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_mailing_status" class="form-label">Статус</label>
+                    {{ form.mailing_status }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_message" class="form-label">Сообщение</label>
+                    {{ form.message }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="id_client" class="form-label">Клиент</label>
+                    {{ form.client }}
+                </div>
+
+                <button type="submit" href="{% url 'mailing_list:client_list' %}" class="btn btn-primary my-2">Создать
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,147 @@
+# ==========================
+# 🐍 Python / Poetry / Django
+# ==========================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+build/
+dist/
+develop-eggs/
+.eggs/
+*.egg-info/
+*.egg
+MANIFEST
+
+# Poetry
+# (Lock-файл можно оставить в репо, если проект не библиотека)
+# poetry.lock
+
+# PyInstaller
+# Обычно содержит временные файлы сборки
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+pytest_cache/
+.pytest_cache/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+static_root/
+collected_static/
+# (или ваш путь к собранной статики)
+
+# Django secret files
+.env
+.env.*
+*.env
+config/settings/local.py
+config/settings/dev.py
+
+# Ignore compiled messages
+*.mo
+
+# Ignore cache files
+*.cache
+__pycache__/
+*.py[cod]
+
+# ==========================
+# 📦 IDE / Editor settings
+# ==========================
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# Vim / Emacs / Sublime / Others
+*.swp
+*.swo
+*.swn
+*~
+.project
+.pydevproject
+*.sublime-workspace
+*.sublime-project
+.DS_Store
+
+# ==========================
+# 🧪 Environment & virtualenv
+# ==========================
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Poetry’s virtualenv (если используется в проекте)
+# Обычно poetry хранит venv вне проекта, но если вы изменили настройку:
+# .venv/
+
+# ==========================
+# 🔧 Tooling / CI / Lint
+# ==========================
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+ruff_cache/
+.pyright/
+
+# ==========================
+# 🚀 Deployment / Containers
+# ==========================
+# Docker
+*.pid
+*.seed
+*.pid.lock
+docker-compose.override.yml
+.env.docker
+.env.prod
+.env.local
+.env.dev
+
+# ==========================
+# 🧩 Miscellaneous
+# ==========================
+*.bak
+*.tmp
+*.temp
+*.old
+Thumbs.db
+ehthumbs.db
