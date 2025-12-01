@@ -1,0 +1,15 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+      <br>
+    <br>
+    <h1>Удаление сообщения</h1>
+    <br>
+    <br>
+    <form method="post">
+        {% csrf_token %}
+        <p>Действительно хотите удалить сообщение <b>{{ message.title_message }}</b>?</p>
+        <button type="submit" class="w-100 btn btn-lg btn-outline-danger">Удалить</button>
+        <a class="w-100 btn btn-lg btn-outline-primary" href="{% url 'mailing_list:message_detail' message.pk %}">Вернуться к сообщению</a>
+    </form>
+{% endblock %}

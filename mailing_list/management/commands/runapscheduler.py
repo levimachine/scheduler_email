@@ -1,4 +1,4 @@
-from mailing_list.management.commands.logger import get_logger
+from mailing_list.management.commands.logger import logger
 from django.conf import settings
 
 from mailing_list.models import Client
@@ -11,7 +11,7 @@ from django_apscheduler.models import DjangoJobExecution
 from django_apscheduler import util
 from django.core.mail import send_mail
 
-logger = get_logger(file_name='runapscheduler.log')
+
 
 
 def send_email_to_clients():

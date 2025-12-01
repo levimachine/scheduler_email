@@ -1,0 +1,17 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3"><h4 class="my-0 fw-normal">{{ message.title_message }}</h4></div>
+            <ul class="list-unstyled mt-3 mb-4">
+                <li><p>1. Id сообщения - {{ message.pk }}</p></li>
+                <li><p>2. Тело сообщения - {{ message.body_message }}</p></li>
+            </ul>
+            <a type="button" href="{% url 'mailing_list:message_list' %}" class="w-100 btn btn-lg btn-primary">К списку
+                сообщения</a>
+            <a type="button" href="{% url 'mailing_list:message_delete' message.pk %}"
+               class="w-100 btn btn-lg btn-danger">Удалить сообщение</a>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3"><h4 class="my-0 fw-normal">Логи рассылки ''{{ object.mailing.title }}''.</h4>
+            </div>
+            <ul class="list-unstyled mt-3 mb-4">
+                <li><p>1. Название работы(job) - {{ job.id }}</p></li>
+                <li><p>2. Начало работы - {{ object.mailing.first_sending_date }}</p></li>
+                <li><p>3. Следующий запуск - {{ job.next_run_time }}</p></li>
+                {% if job_execution %}
+                    <li><p>4. Id последнего execution - {{ job_execution.id }}</p></li>
+                    <li><p>5. Дата последнего запуска - {{ job_execution.run_time }}</p></li>
+                    <li><p>6. Статус последней рассылки - {{ job_execution.status }}</p></li>
+                    <li><p>7. Продолжительность последней рассылки - {{ job_execution.duration }}</p></li>
+                    <li><p>8. Количество выполненных работ - {{ job_execution_count }}</p></li>
+                    <li><p>9. Исключения - {{ job_execution.exception }}</p></li>
+                {% endif %}
+            </ul>
+            <a type="button" href="{% url 'mailing_list:mailingsettings_detail' object.mailing.pk %}"
+               class="w-100 btn btn-lg btn-primary">Вернуться к рассылке</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+

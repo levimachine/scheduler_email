@@ -12,6 +12,10 @@
             <form method="post">
                 {% csrf_token %}
                 <div class="mb-3">
+                    <label for="id_title" class="form-label">Название рассылки</label>
+                    {{ form.title }}
+                </div>
+                <div class="mb-3">
                     <label for="id_first_sending_date" class="form-label">Дата и время первой отправки</label>
                     <input
                             type="datetime-local"
@@ -36,13 +40,11 @@
                     <label for="id_message" class="form-label">Сообщение</label>
                     {{ form.message }}
                 </div>
-
                 <div class="mb-3">
-                    <label for="id_client" class="form-label">Клиент</label>
+                    <label for="id_client" class="form-label">Клиенты</label>
                     {{ form.client }}
                 </div>
-
-                <button type="submit" href="{% url 'mailing_list:client_list' %}" class="btn btn-primary my-2">Создать
+                <button type="submit" class="btn btn-primary my-2">Создать
                 </button>
             </form>
         </div>

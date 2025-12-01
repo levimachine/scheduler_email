@@ -1,0 +1,18 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"><h5>На почту {{ user.email }} было отправлено письмо с секретным ключом, введите его для
+                верификации.</h5></div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-success">Подтвердить</button>
+                </form>
+            </div>
+            <div class="card-footer"></div>
+        </div>
+    </div>
+{% endblock %}

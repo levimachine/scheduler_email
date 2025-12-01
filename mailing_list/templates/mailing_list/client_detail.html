@@ -1,0 +1,20 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3"><h4 class="my-0 fw-normal">{{ client.fullname }}</h4></div>
+            <ul class="list-unstyled mt-3 mb-4">
+                <li><p>1. Id клиента - {{ client.pk }}</p></li>
+                <li><p>2. Почта клиента - {{ client.mail }}</p></li>
+                <li><p>3. Комментарий - {{ client.comment }}</p></li>
+            </ul>
+            <a type="button" href="{% url 'mailing_list:client_list' %}" class="w-100 btn btn-lg btn-primary">К списку
+                клиентов</a>
+            <a type="button" href="{% url 'mailing_list:client_update' client.pk %}"
+               class="w-100 btn btn-lg btn-success">Редактировать</a>
+            <a type="button" href="{% url 'mailing_list:client_delete' client.pk %}"
+               class="w-100 btn btn-lg btn-danger">Удалить клиента</a>
+        </div>
+    </div>
+{% endblock %}

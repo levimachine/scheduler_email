@@ -1,0 +1,28 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <div class="col">
+        <div class="card mb-4 rounded-3 shadow-sm">
+            <div class="card-header py-3"><h4 class="my-0 fw-normal">{{ mailingsettings.title }}</h4></div>
+            <ul class="list-unstyled mt-3 mb-4">
+                <li><p>1. Id рассылки - {{ mailingsettings.pk }}</p></li>
+                <li><p>2. Список получателей -
+                    {% for element in mailingsettings.client.all %}
+                        {{ element }},
+                    {% endfor %}
+                </p></li>
+                <li><p>3. Периодичность(в днях) - {{ mailingsettings.period }}</p></li>
+                <li><p>4. Старт рассылки - {{ mailingsettings.first_sending_date }}</p></li>
+                <li><p>5. Название сообщения - {{ mailingsettings.message.title_message }}</p></li>
+            </ul>
+            <a type="button" href="{% url 'mailing_list:mailingsettings_list' %}" class="w-100 btn btn-lg btn-primary">К
+                списку
+                рассылок</a>
+            <a type="button"
+               href="{% url 'mailing_list:mailingsettings_attempt' mailingsettings.log.slug %}"
+               class="w-100 btn btn-lg btn-success">Логи рассылки</a>
+            <a type="button" href="{% url 'mailing_list:mailingsettings_delete' mailingsettings.pk %}"
+               class="w-100 btn btn-lg btn-danger">Удалить рассылку</a>
+        </div>
+    </div>
+{% endblock %}

@@ -61,8 +61,6 @@ collected_static/
 
 # Django secret files
 .env
-.env.*
-*.env
 config/settings/local.py
 config/settings/dev.py
 

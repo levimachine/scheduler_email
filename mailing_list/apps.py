@@ -1,8 +1,7 @@
+from time import sleep
 from django.apps import AppConfig
-from apscheduler.schedulers.background import BackgroundScheduler
-from django.conf import settings
-
-from mailing_list.management.commands.logger import get_logger
+from mailing_list.management.commands.logger import logger
+import os
 
 
 class MailingListConfig(AppConfig):
@@ -10,11 +9,11 @@ class MailingListConfig(AppConfig):
     name = 'mailing_list'
 
     def ready(self):
-        from django_apscheduler.jobstores import DjangoJobStore
+        if os.environ.get('RUN_MAIN') != 'true':
+            return
 
-        logger = get_logger('scheduler.log')
-        scheduler = BackgroundScheduler(timezone=settings.TIME_ZONE)
-        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        sleep(1.5)
+        from dj_scheduler import scheduler
 
         try:
             scheduler.start()
