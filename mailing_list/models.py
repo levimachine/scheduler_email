@@ -3,6 +3,9 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from slugify import slugify
 
+from scheduler_email.settings import AUTH_USER_MODEL
+from users.models import User
+
 NULLABLE = {'blank': True, 'null': True}
 
 
@@ -10,6 +13,7 @@ class Client(models.Model):
     mail = models.EmailField(max_length=100, verbose_name='почта')
     fullname = models.CharField(max_length=200, verbose_name='полное имя')
     comment = models.TextField(verbose_name='комментарий')
+    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
 
     def __str__(self):
         return self.fullname
@@ -22,6 +26,7 @@ class Client(models.Model):
 class Message(models.Model):
     title_message = models.CharField(max_length=200, verbose_name='тема письма')
     body_message = models.TextField(verbose_name='тело письма')
+    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
 
     def __str__(self):
         return self.title_message
@@ -42,6 +47,7 @@ class MailingSettings(models.Model):
     message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, to_field='id',
                                 verbose_name='сообщение')
     client = models.ManyToManyField(Client, default=None, related_name='mailing', verbose_name='клиент')
+    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
 
     # day='*/10' → каждые 10 дней
 
@@ -60,6 +66,7 @@ class MailingAttempt(models.Model):
     last_attempt_date = models.DateTimeField(**NULLABLE, verbose_name='дата и время последней попытки')
     attempt_status = models.BooleanField(**NULLABLE, default=False, verbose_name='статус попытки')
     mail_service_response = models.TextField(**NULLABLE, default=None, verbose_name='ответ почтового сервиса')
+    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
 
     def __str__(self):
         return f'{self.attempt_status}, {self.last_attempt_date}, {self.mail_service_response}'
@@ -77,6 +84,4 @@ class MailingAttempt(models.Model):
 @receiver(post_save, sender=MailingSettings)
 def create_mailing_log(sender, instance, created, **kwargs):
     if created:
-        MailingAttempt.objects.create(mailing=instance)
-
-
+        MailingAttempt.objects.create(mailing=instance, owner=instance.owner)

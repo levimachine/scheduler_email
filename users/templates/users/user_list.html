@@ -1,0 +1,54 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <section class="py-5 text-center container">
+        <div class="row py-lg-5">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h1 class="fw-light">Список пользователей</h1>
+                <p class="lead text-body-secondary">Управление пользователями сервиса</p>
+
+                <div class="row justify-content-center mt-5">
+                    <div class="col-md-10">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            {% for user in user_list %}
+                                <div class="col">
+                                    <div class="card h-100 shadow-sm">
+                                        <div class="card-body d-flex flex-column justify-content-center align-items-center">
+                                            <h5 class="card-title mb-3">{{ user.email }}</h5>
+                                            <p class="card-text mb-1">
+                                                <small class="text-muted">Имя: {{ user.first_name|default:"Не указано" }}</small>
+                                            </p>
+                                            <p class="card-text mb-1">
+                                                <small class="text-muted">Фамилия: {{ user.last_name|default:"Не указано" }}</small>
+                                            </p>
+                                            <p class="card-text mb-3">
+                                                <small class="{% if user.is_active %}text-success{% else %}text-danger{% endif %}">
+                                                    Статус: {% if user.is_active %}Активен{% else %}Неактивен{% endif %}
+                                                </small>
+                                            </p>
+                                            <form method="post" action="{% url 'users:user_deactivate' user.pk %}"
+                                                  class="w-100">
+                                                {% csrf_token %}
+                                                <button type="submit"
+                                                        class="btn btn-outline-{% if user.is_active %}danger{% else %}success{% endif %} w-100">
+                                                    {% if user.is_active %}Деактивировать{% else %}
+                                                        Активировать{% endif %}
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="col-12">
+                                    <div class="alert alert-info" role="alert">
+                                        Пользователи не найдены
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

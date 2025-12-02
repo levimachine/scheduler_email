@@ -1,19 +1,54 @@
 <section class="py-5 text-center container">
     <div class="row py-lg-5">
         <div class="col-lg-6 col-md-8 mx-auto"><h1 class="fw-light">Приветствую тебя!</h1>
-            <p class="lead text-body-secondary">В этом веб приложении ты можешь сделать рассылку, оставить отзыв
-                о
-                нашем сервисе и многое другое!</p>
-            <p>
-                <a href="{% url 'mailing_list:client_create' %}" class="btn btn-primary my-2">Добавить клиента</a>
-                <a href="{% url 'mailing_list:client_list' %}" class="btn btn-primary my-2">Список клиентов</a>
-                <a href="{% url 'mailing_list:message_create' %}" class="btn btn-primary my-2">Создать сообщение для
-                    рассылки</a>
-                <a href="{% url 'mailing_list:message_list' %}" class="btn btn-primary my-2">Список сообщений</a>
-                <a href="{% url 'mailing_list:mailingsettings_create' %}" class="btn btn-primary my-2">Создать
-                    рассылку</a>
-                <a href="{% url 'mailing_list:mailingsettings_list' %}" class="btn btn-primary my-2">Список рассылок</a>
-            </p>
+            {% if user.is_verify %}
+                <p class="lead text-body-secondary">В этом веб приложении ты можешь сделать рассылку, оставить отзыв
+                    о
+                    нашем сервисе и многое другое!</p>
+            {% else %}
+                <p class="lead text-body-secondary">Чтобы начать пользоваться приложением пройдите верификацию👋😊 </p>
+            {% endif %}
+            {% if user.is_verify %}
+                <div class="row justify-content-center g-4">
+
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a href="{% url 'mailing_list:client_create' %}" class="btn btn-primary w-100 mb-2">
+                            Добавить клиента
+                        </a>
+                        <a href="{% url 'mailing_list:client_list' %}" class="btn btn-outline-primary w-100">
+                            Список клиентов
+                        </a>
+                    </div>
+
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a href="{% url 'mailing_list:message_create' %}" class="btn btn-primary w-100 mb-2">
+                            Создать сообщение
+                        </a>
+                        <a href="{% url 'mailing_list:message_list' %}" class="btn btn-outline-primary w-100 mb-4">
+                            Список сообщений
+                        </a>
+                        {% if perms.users.deactivate_user or user.is_superuser %}
+                            <a href="{% url 'users:user_list' %}" class="btn btn-success w-100">
+                                Список всех пользователей
+                            </a>
+                        {% endif %}
+                    </div>
+
+
+                    <div class="col-md-4 d-flex flex-column align-items-center">
+                        <a href="{% url 'mailing_list:mailingsettings_create' %}"
+                           class="btn btn-primary w-100 mb-2">
+                            Создать рассылку
+                        </a>
+                        <a href="{% url 'mailing_list:mailingsettings_list' %}"
+                           class="btn btn-outline-primary w-100">
+                            Список рассылок
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
         </div>
     </div>
 </section>

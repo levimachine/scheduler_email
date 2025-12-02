@@ -8,6 +8,7 @@
                 <li><p>1. Id клиента - {{ client.pk }}</p></li>
                 <li><p>2. Почта клиента - {{ client.mail }}</p></li>
                 <li><p>3. Комментарий - {{ client.comment }}</p></li>
+                <li><p>4. Пользователь - {{ client.owner }}</p></li>
             </ul>
             <a type="button" href="{% url 'mailing_list:client_list' %}" class="w-100 btn btn-lg btn-primary">К списку
                 клиентов</a>
