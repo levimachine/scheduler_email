@@ -1,9 +1,11 @@
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from mailing_list.apps import MailingListConfig
 from mailing_list.views import ClientCreateView, MessageCreateView, MailingSettingsCreateView, HomeView, ClientListView, \
     ClientDetailView, ClientDeleteView, MessageListView, MessageDetailView, MessageDeleteView, MailingSettingsListView, \
-    MailingSettingsDetailView, MailingSettingsDeleteView, ClientUpdateView, MailingAttemptDetailView
+    MailingSettingsDetailView, MailingSettingsDeleteView, ClientUpdateView, MailingAttemptDetailView, MailingPauseView, \
+    StatisticView
 
 app_name = MailingListConfig.name
 urlpatterns = [
@@ -23,5 +25,8 @@ urlpatterns = [
     path('mailingsettings_list', MailingSettingsListView.as_view(), name='mailingsettings_list'),
     path('mailingsettings_detail/<int:pk>', MailingSettingsDetailView.as_view(), name='mailingsettings_detail'),
     path('mailingsettings_detail/<int:pk>/delete', MailingSettingsDeleteView.as_view(), name='mailingsettings_delete'),
-    path('mailingsettings_detail/attempt/<str:slug>', MailingAttemptDetailView.as_view(), name='mailingsettings_attempt')
+    path('mailingsettings_detail/attempt/<str:slug>', MailingAttemptDetailView.as_view(), name='mailingsettings_attempt'),
+    path('mailing_pause/<int:pk>', MailingPauseView.as_view(), name='mailing_pause'),
+    path('statistic/', StatisticView.as_view(), name='statistic'),
+
 ]

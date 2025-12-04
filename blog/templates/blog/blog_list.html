@@ -1,0 +1,40 @@
+{% extends 'mailing_list/base.html' %}
+
+{% block content %}
+    <section class="py-5 text-center container">
+        {% if perms.blog.add_blog %}
+            <div class="row py-lg-5 justify-content-center">
+                <div class="col-md-4 d-flex flex-column align-items-center">
+                    <a href="{% url 'blog:blog_create' %}" class="btn btn-primary w-100 mb-4 btn-lg">
+                        Создать блог
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="row justify-content-center mt-4">
+            {% for blog in blog_list %}
+                <div class="col-md-7 mb-3">
+                    <div class="card h-100 shadow-sm">
+                        {% if blog.image %}
+                            <img src="{{ blog.image.url }}" class="card-img-top" alt="{{ blog.title }}">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ blog.title }}</h5>
+                            <a href="{% url 'blog:blog_detail' blog.pk %}"
+                           class="btn btn-outline-primary mt-3 align-self-start">
+                            Подробнее
+                        </a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        Блоги не найдены
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

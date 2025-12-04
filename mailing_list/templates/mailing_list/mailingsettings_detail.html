@@ -20,7 +20,15 @@
                 рассылок</a>
             <a type="button"
                href="{% url 'mailing_list:mailingsettings_attempt' mailingsettings.log.slug %}"
-               class="w-100 btn btn-lg btn-success">Логи рассылки</a>
+               class="w-100 btn btn-lg btn-info text-white">Логи рассылки</a>
+            <form method="post" action="{% url 'mailing_list:mailing_pause' mailingsettings.pk %}" class="w-100">
+                {% csrf_token %}
+                <button type="submit"
+                        class="w-100 btn btn-lg btn-{% if mailingsettings.mailing_status == 'running' or mailingsettings.mailing_status == 'created' %}warning{% else %}success{% endif %} text-white">
+                    {% if mailingsettings.mailing_status == 'running' or mailingsettings.mailing_status == 'created' %}
+                        Выключить рассылку{% else %}Включить рассылку{% endif %}
+                </button>
+            </form>
             <a type="button" href="{% url 'mailing_list:mailingsettings_delete' mailingsettings.pk %}"
                class="w-100 btn btn-lg btn-danger">Удалить рассылку</a>
         </div>

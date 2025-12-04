@@ -1,0 +1,62 @@
+[
+  {
+    "model": "mailing_list.client",
+    "pk": 1,
+    "fields": {
+      "mail": "ivan.ivanov@example.com",
+      "fullname": "Иван Иванов",
+      "comment": "Заинтересован в новых услугах",
+      "owner": 2
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 2,
+    "fields": {
+      "mail": "elena.petrovna@example.com",
+      "fullname": "Елена Петрова",
+      "comment": "Хотела бы получить консультацию по продукту",
+      "owner": 2
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 3,
+    "fields": {
+      "mail": "sergey.smirnov@example.com",
+      "fullname": "Сергей Смирнов",
+      "comment": "Интересуется корпоративными тарифами",
+      "owner": 2
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 4,
+    "fields": {
+      "mail": "anna.kuznetsova@example.com",
+      "fullname": "Анна Кузнецова",
+      "comment": "Хочет демо-версию продукта",
+      "owner": 2
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 5,
+    "fields": {
+      "mail": "petr.volkov@example.com",
+      "fullname": "Пётр Волков",
+      "comment": "Просил рассылку новостей",
+      "owner": 1
+    }
+  },
+  {
+    "model": "mailing_list.client",
+    "pk": 6,
+    "fields": {
+      "mail": "olga.fedorova@example.com",
+      "fullname": "Ольга Фёдорова",
+      "comment": "Хотела бы скидку на первый заказ",
+      "owner": 1
+    }
+  }
+]

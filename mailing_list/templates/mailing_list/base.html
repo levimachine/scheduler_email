@@ -67,8 +67,11 @@
                         {% if user.is_authenticated %}
                             <li><a href="#" class="text-white">{{ user.email }}</a></li>
                         {% endif %}
+                        {% if user.is_staff %}
+                            <li><a href="{% url 'mailing_list:statistic' %}" class="text-white">Статистика</a></li>
+                        {% endif %}
                         <li><a href="https://t.me/levimachine" class="text-white">Наш телеграмм</a></li>
-                        <li><a href="#" class="text-white">Блог</a></li>
+                        <li><a href="{% url 'blog:blog_list' %}" class="text-white">Блог</a></li>
                         {% if not user.is_authenticated %}
                             <li><a href="{% url 'users:user_register' %}" class="text-white">Регистрация</a></li>
                             <li><a href="{% url 'users:user_login' %}" class="text-white">Логин</a></li>

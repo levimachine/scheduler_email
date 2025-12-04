@@ -9,7 +9,7 @@
                 <p class="lead text-body-secondary">Чтобы начать пользоваться приложением пройдите верификацию👋😊 </p>
             {% endif %}
             {% if user.is_verify %}
-                <div class="row justify-content-center g-4">
+                <div class="row justify-content-center g-4 mb-4">
 
 
                     <div class="col-md-4 d-flex flex-column align-items-center">
@@ -48,6 +48,34 @@
                         </a>
                     </div>
                 </div>
+
+                <section class="py-5 text-center container">
+                    <h2 class="text-center  text-body-secondary">Актуальные статьи из нашего блога!</h2>
+                    <div class="row justify-content-center mt-4">
+                        {% for blog in blog_list %}
+                            <div class="col-md-8 mb-3">
+                                <div class="card h-100 shadow-sm">
+                                    {% if blog.image %}
+                                        <img src="{{ blog.image.url }}" class="card-img-top" alt="{{ blog.title }}">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ blog.title }}</h5>
+                                        <a href="{% url 'blog:blog_detail' blog.pk %}"
+                                           class="btn btn-outline-primary mt-3 align-self-start">
+                                            Подробнее
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="col-12">
+                                <div class="alert alert-info text-center">
+                                    Блоги не найдены
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </section>
             {% endif %}
         </div>
     </div>

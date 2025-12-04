@@ -1,9 +1,10 @@
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
+from django.views.decorators.cache import cache_page
 
 from users.apps import UsersConfig
 from users.forms import LoginForm
-from users.views import UserRegisterView, UserInputSecretKey, UserListView, UserDeactivate
+from users.views import UserRegisterView, UserInputSecretKey, UserListView, UserDeactivateView
 
 app_name = UsersConfig.name
 
@@ -13,5 +14,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='user_logout'),
     path('user_verify/<int:pk>', UserInputSecretKey.as_view(), name='user_verify'),
     path('user_list', UserListView.as_view(), name='user_list'),
-    path('user_deactivate/<int:pk>', UserDeactivate.as_view(), name='user_deactivate'),
+    path('user_deactivate/<int:pk>', UserDeactivateView.as_view(), name='user_deactivate'),
 ]

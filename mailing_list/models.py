@@ -47,7 +47,7 @@ class MailingSettings(models.Model):
     message = models.ForeignKey(Message, default=None, on_delete=models.CASCADE, to_field='id',
                                 verbose_name='сообщение')
     client = models.ManyToManyField(Client, default=None, related_name='mailing', verbose_name='клиент')
-    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
+    owner = models.ForeignKey(AUTH_USER_MODEL, default=True, related_name='mailing', on_delete=models.CASCADE, to_field='id', verbose_name='Пользователь', **NULLABLE)
 
     # day='*/10' → каждые 10 дней
 

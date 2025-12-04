@@ -52,13 +52,13 @@ class UserListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = User
 
     def test_func(self):
-        return self.request.user.is_superuser
+        return self.request.user.has_perm('users.deactivate_user')
 
     def get_queryset(self):
-        return User.objects.filter(is_superuser=False)
+        return User.objects.filter(is_superuser=False, is_staff=False)
 
 
-class UserDeactivate(LoginRequiredMixin, UserPassesTestMixin, View):
+class UserDeactivateView(LoginRequiredMixin, UserPassesTestMixin, View):
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.has_perm('users.deactivate_user')
 

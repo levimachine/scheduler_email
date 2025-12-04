@@ -1,12 +1,18 @@
 from apscheduler.triggers.cron import CronTrigger
+from apscheduler.triggers.interval import IntervalTrigger
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import ListView, CreateView, TemplateView, DetailView, DeleteView, UpdateView
 from django_apscheduler.models import DjangoJobExecution, DjangoJob
+
+from blog.models import Blog
 from mailing_list.forms import ClientForm, MessageForm, MailingSettingsForm
 from mailing_list.management.commands.logger import logger
 from mailing_list.models import Client, Message, MailingSettings, MailingAttempt
 from dj_scheduler import scheduler, send_email_to_clients
+from mailing_list.services import get_cached_queryset
 
 
 class SelfUserPassesTestMixin(UserPassesTestMixin):
@@ -19,6 +25,11 @@ class SelfUserPassesTestMixin(UserPassesTestMixin):
 
 class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'mailing_list/home.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['blog_list'] = Blog.objects.order_by('-publish_date')[:3]
+        return context
 
 
 class ClientCreateView(LoginRequiredMixin, CreateView):
@@ -35,10 +46,8 @@ class ClientListView(LoginRequiredMixin, ListView):
     model = Client
 
     def get_queryset(self):
-        print(self.request.user.has_perm('users.deactivate_user'))
-        if self.request.user.is_superuser:
-            return Client.objects.all()
-        return Client.objects.filter(owner=self.request.user)
+        print(self.request.user.pk)
+        return get_cached_queryset(self.request.user, Client)
 
 
 class ClientDetailView(LoginRequiredMixin, SelfUserPassesTestMixin, DetailView):
@@ -72,13 +81,15 @@ class MessageListView(LoginRequiredMixin, ListView):
     model = Message
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return Message.objects.all()
-        return Message.objects.filter(owner=self.request.user)
+        return get_cached_queryset(self.request.user, Message)
 
 
-class MessageDetailView(LoginRequiredMixin, SelfUserPassesTestMixin, DetailView):
+class MessageDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Message
+    raise_exception = True
+
+    def test_func(self):
+        return self.request.user.is_staff or self.get_object().owner == self.request.user
 
 
 class MessageDeleteView(LoginRequiredMixin, SelfUserPassesTestMixin, DeleteView):
@@ -98,8 +109,8 @@ class MailingSettingsCreateView(LoginRequiredMixin, CreateView):
             logger.info(f'{mailing_settings.first_sending_date}')
             scheduler.add_job(
                 send_email_to_clients,
-                trigger=CronTrigger(second=f'*/{mailing_settings.period}',
-                                    start_date=mailing_settings.first_sending_date),
+                trigger=IntervalTrigger(days=mailing_settings.period,
+                                        start_date=mailing_settings.first_sending_date),
                 id=f'send_email_{mailing_settings.id}',
                 max_instances=1,
                 replace_existing=True,
@@ -115,9 +126,7 @@ class MailingSettingsListView(LoginRequiredMixin, ListView):
     model = MailingSettings
 
     def get_queryset(self):
-        if self.request.user.is_superuser:
-            return MailingSettings.objects.all()
-        return MailingSettings.objects.filter(owner=self.request.user)
+        return get_cached_queryset(self.request.user, MailingSettings)
 
 
 class MailingSettingsDeleteView(LoginRequiredMixin, SelfUserPassesTestMixin, DeleteView):
@@ -136,7 +145,7 @@ class MailingAttemptDetailView(LoginRequiredMixin, SelfUserPassesTestMixin, Deta
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # context['job'] = [job for job in DjangoJob.objects.all() if job.id[-1:] == str(self.object.mailing.pk)][0]
-        context['job'] = DjangoJob.objects.filter(id=f'send_email_{self.object.mailing.id}')[0]
+        context['job'] = DjangoJob.objects.get(id=f'send_email_{self.object.mailing.id}')
         context['job_execution'] = [job_execution for job_execution in DjangoJobExecution.objects.all() if
                                     job_execution.job_id == context[
                                         'job'].id]
@@ -146,5 +155,41 @@ class MailingAttemptDetailView(LoginRequiredMixin, SelfUserPassesTestMixin, Deta
         return context
 
 
-class MailingSettingsDetailView(LoginRequiredMixin, SelfUserPassesTestMixin, DetailView):
+class MailingSettingsDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = MailingSettings
+
+    raise_exception = True
+
+    def test_func(self):
+        return self.request.user.is_staff or self.get_object().owner == self.request.user
+
+
+class MailingPauseView(LoginRequiredMixin, UserPassesTestMixin, View):
+    def test_func(self):
+        mailing = get_object_or_404(MailingSettings, pk=self.kwargs.get('pk'))
+        return self.request.user.is_staff or mailing.owner == self.request.user
+
+    def post(self, request, pk):
+        mailing = get_object_or_404(MailingSettings, pk=pk)
+        if mailing.mailing_status in ['running', 'created']:
+            scheduler.pause_job(job_id=f'send_email_{mailing.pk}')
+            mailing.mailing_status = 'completed'
+        else:
+            scheduler.resume_job(job_id=f'send_email_{mailing.pk}')
+            mailing.mailing_status = 'running'
+        mailing.save()
+        return redirect('mailing_list:mailingsettings_detail', pk=pk)
+
+
+class StatisticView(LoginRequiredMixin, UserPassesTestMixin, TemplateView):
+    template_name = 'mailing_list/statistic.html'
+
+    def test_func(self):
+        return self.request.user.is_staff
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['mailing'] = len(MailingSettings.objects.all())
+        context['mailing_active'] = len(MailingSettings.objects.exclude(mailing_status='completed'))
+        context['clients'] = len(Client.objects.all())
+        return context
